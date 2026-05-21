@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自願醫保計劃比較 | @pru_lilylau</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700&family=Noto+Sans+TC:wght@300;400;500;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: #faf8f5;
+    color: #2c2a27;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  /* === WATERMARK === */
+  .watermark {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    z-index: 999;
+    overflow: hidden;
+  }
+  .watermark-text {
+    position: absolute;
+    font-size: 22px;
+    font-weight: 600;
+    color: rgba(180, 140, 100, 0.10);
+    white-space: nowrap;
+    letter-spacing: 2px;
+    font-family: 'Noto Sans TC', sans-serif;
+    transform: rotate(-30deg);
+    user-select: none;
+  }
+
+  /* === LAYOUT === */
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px 100px;
+    position: relative;
+  }
+
+  /* === HEADER === */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid #e0d8cf;
+  }
+  .header-badge {
+    display: inline-block;
+    background: #8b6f4e;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    padding: 5px 14px;
+    border-radius: 2px;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+  }
+  .header h1 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #1e1c19;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+  .header p {
+    font-size: 14px;
+    color: #7a7060;
+    line-height: 1.7;
+  }
+
+  /* === INTRO EXPLAINER === */
+  .intro-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+  .intro-card {
+    background: #fff;
+    border: 1px solid #e8e0d6;
+    border-radius: 10px;
+    padding: 18px 16px;
+  }
+  .intro-card .icon {
+    font-size: 22px;
+    margin-bottom: 8px;
+  }
+  .intro-card h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #3a3530;
+    margin-bottom: 6px;
+  }
+  .intro-card p {
+    font-size: 12px;
+    color: #7a7060;
+    line-height: 1.7;
+  }
+
+  /* === SECTION TITLE === */
+  .section-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #2c2a27;
+    margin-bottom: 16px;
+    padding-left: 12px;
+    border-left: 3px solid #8b6f4e;
+  }
+
+  /* === PREMIUM SUMMARY === */
+  .premium-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+  .premium-card {
+    background: #fff;
+    border: 1px solid #e8e0d6;
+    border-radius: 10px;
+    padding: 20px 18px;
+    text-align: center;
+  }
+  .premium-card.highlight {
+    border: 2px solid #8b6f4e;
+    background: #fdf8f2;
+  }
+  .premium-card .label {
+    font-size: 11px;
+    color: #9a8878;
+    font-weight: 500;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+  }
+  .premium-card .amount {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #2c2a27;
+    margin-bottom: 4px;
+  }
+  .premium-card.highlight .amount {
+    color: #6b4f2e;
+  }
+  .premium-card .sub {
+    font-size: 12px;
+    color: #9a8878;
+  }
+  .premium-card .saving {
+    font-size: 12px;
+    color: #5a7a4a;
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  /* === PLAN BREAKDOWN === */
+  .plan-breakdown {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+  .plan-box {
+    background: #fff;
+    border: 1px solid #e8e0d6;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .plan-box-header {
+    background: #f0ebe4;
+    padding: 12px 16px;
+    border-bottom: 1px solid #e8e0d6;
+  }
+  .plan-box-header .plan-co {
+    font-size: 10px;
+    color: #9a8878;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+  .plan-box-header .plan-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c2a27;
+  }
+  .plan-box-header .plan-premium {
+    font-size: 12px;
+    color: #7a7060;
+    margin-top: 2px;
+  }
+  .plan-box-body {
+    padding: 14px 16px;
+  }
+  .plan-feat {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 9px;
+    font-size: 12.5px;
+    color: #3a3530;
+    line-height: 1.5;
+    align-items: flex-start;
+  }
+  .plan-feat .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #8b6f4e;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+
+  /* === COMPARISON TABLE === */
+  .table-wrap {
+    background: #fff;
+    border: 1px solid #e8e0d6;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead tr {
+    background: #f0ebe4;
+  }
+  thead th {
+    padding: 12px 14px;
+    font-weight: 600;
+    color: #3a3530;
+    text-align: center;
+    border-bottom: 1px solid #e0d8cf;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  thead th:first-child {
+    text-align: left;
+    width: 26%;
+  }
+  tbody tr:nth-child(even) {
+    background: #faf8f5;
+  }
+  tbody td {
+    padding: 11px 14px;
+    border-bottom: 1px solid #f0ebe4;
+    color: #3a3530;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 1.5;
+  }
+  tbody td:first-child {
+    text-align: left;
+    font-weight: 500;
+    color: #5a5248;
+    font-size: 12.5px;
+  }
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+  .tag-good {
+    display: inline-block;
+    background: #edf4e8;
+    color: #3d6b2b;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 11.5px;
+    font-weight: 500;
+  }
+  .tag-info {
+    display: inline-block;
+    background: #e8f0fb;
+    color: #2a5299;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 11.5px;
+    font-weight: 500;
+  }
+  .tag-neutral {
+    display: inline-block;
+    background: #f3ece4;
+    color: #7a5c3a;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 11.5px;
+    font-weight: 500;
+  }
+  .na {
+    color: #bbb;
+    font-size: 12px;
+  }
+  .sub-note {
+    font-size: 11px;
+    color: #9a8878;
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* === WHAT THIS MEANS === */
+  .explainer-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+  .explainer-box {
+    background: #fff;
+    border: 1px solid #e8e0d6;
+    border-radius: 10px;
+    padding: 18px 16px;
+  }
+  .explainer-box h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2c2a27;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .explainer-box ul {
+    list-style: none;
+    padding: 0;
+  }
+  .explainer-box ul li {
+    font-size: 12.5px;
+    color: #5a5248;
+    padding: 5px 0;
+    border-bottom: 1px solid #f3ece4;
+    line-height: 1.6;
+    display: flex;
+    gap: 8px;
+  }
+  .explainer-box ul li:last-child {
+    border-bottom: none;
+  }
+  .explainer-box ul li::before {
+    content: '→';
+    color: #8b6f4e;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  /* === CAUTION BOX === */
+  .caution-box {
+    background: #fff8f0;
+    border: 1px solid #e8c99a;
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 32px;
+  }
+  .caution-box h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #7a4a10;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .caution-box ul {
+    list-style: none;
+    padding: 0;
+  }
+  .caution-box ul li {
+    font-size: 12.5px;
+    color: #5a3a10;
+    padding: 5px 0;
+    border-bottom: 1px solid #f3e0c4;
+    line-height: 1.7;
+    display: flex;
+    gap: 8px;
+  }
+  .caution-box ul li:last-child { border-bottom: none; }
+  .caution-box ul li::before {
+    content: '⚠';
+    color: #c47c20;
+    flex-shrink: 0;
+  }
+
+  /* === DISCLAIMER === */
+  .disclaimer {
+    background: #f5f3f0;
+    border: 1px solid #e0d8cf;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 32px;
+  }
+  .disclaimer h5 {
+    font-size: 11px;
+    font-weight: 600;
+    color: #9a8878;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .disclaimer p {
+    font-size: 11px;
+    color: #9a8878;
+    line-height: 1.8;
+  }
+
+  /* === FOOTER === */
+  .footer-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #2c2a27;
+    color: #d4c9bc;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 28px;
+    font-size: 13px;
+    z-index: 100;
+  }
+  .footer-bar .handle {
+    font-weight: 500;
+    color: #e8ddd2;
+    letter-spacing: 0.5px;
+  }
+  .footer-bar .handle span {
+    color: #c9a97a;
+  }
+  .footer-bar .phone {
+    font-weight: 500;
+    color: #e8ddd2;
+    letter-spacing: 1px;
+  }
+
+  /* === TABLE HEADER SUB === */
+  .th-sub { font-size: 10.5px; font-weight: 400; color: #7a7060; display: block; margin-top: 2px; }
+
+  @media (max-width: 640px) {
+    .intro-cards, .premium-row { grid-template-columns: 1fr; }
+    .plan-breakdown, .explainer-grid { grid-template-columns: 1fr; }
+    table { font-size: 11px; }
+    thead th, tbody td { padding: 8px 8px; }
+    .header h1 { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- WATERMARK -->
+<div class="watermark" id="wm"></div>
+<script>
+(function(){
+  var wm = document.getElementById('wm');
+  var text = '@pru_lilylau';
+  for(var y=0; y<2000; y+=110){
+    for(var x=-200; x<1200; x+=260){
+      var el = document.createElement('div');
+      el.className = 'watermark-text';
+      el.textContent = text;
+      el.style.top = y+'px';
+      el.style.left = x+'px';
+      wm.appendChild(el);
+    }
+  }
+})();
+</script>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-badge">自願醫保計劃比較</div>
+    <h1>轉保值唔值？<br>同一保費，保障差好遠</h1>
+    <p>以下比較專為 63 歲女性客人而設，以翌年保費計算。<br>現有 AIA 計劃 vs 保誠兩計劃組合方案。</p>
+  </div>
+
+  <!-- WHAT IS VHIS -->
+  <div class="section-title">首先，自願醫保係咩嚟？</div>
+  <div class="intro-cards" style="margin-bottom:32px;">
+    <div class="intro-card">
+      <div class="icon">🏥</div>
+      <h3>自願醫保（VHIS）</h3>
+      <p>政府認可嘅醫療保險計劃，幫你喺私家醫院睇病時支付費用，唔使自己掏大筆錢。</p>
+    </div>
+    <div class="intro-card">
+      <div class="icon">💰</div>
+      <h3>自付額係咩？</h3>
+      <p>每年你自己要先付嘅費用，例如自付額 $16,000 即係每年首 $16,000 醫療費自己負責，超出嘅先由保險賠。</p>
+    </div>
+    <div class="intro-card">
+      <div class="icon">📋</div>
+      <h3>保障上限係咩？</h3>
+      <p>保險公司每年最多賠俾你幾多錢。上限愈高，大病大手術時保障愈穩陣。</p>
+    </div>
+  </div>
+
+  <!-- PREMIUM SUMMARY -->
+  <div class="section-title">保費一覽（63歲女性，翌年）</div>
+  <div class="premium-row">
+    <div class="premium-card">
+      <div class="label">現有計劃 · AIA</div>
+      <div class="amount">$26,770</div>
+      <div class="sub">AIA 自願醫保尊尚計劃<br>自付額 $16,000</div>
+    </div>
+    <div class="premium-card">
+      <div class="label">建議方案 · 保誠組合</div>
+      <div class="amount">$26,726</div>
+      <div class="sub">摯稱心 $13,726 + 尚賓 $13,000<br>兩計劃合計</div>
+    </div>
+    <div class="premium-card highlight">
+      <div class="label">差額</div>
+      <div class="amount">-$44</div>
+      <div class="sub">保誠方案更平</div>
+      <div class="saving">保費相若，保障大幅提升 ✓</div>
+    </div>
+  </div>
+
+  <!-- PLAN BREAKDOWN -->
+  <div class="section-title">保誠組合方案：點解要買兩份？</div>
+  <div class="plan-breakdown">
+    <div class="plan-box">
+      <div class="plan-box-header">
+        <div class="plan-co">保誠 · 計劃一</div>
+        <div class="plan-name">摯稱心計劃（普通病房）</div>
+        <div class="plan-premium">每年保費 $13,726（女性63歲）</div>
+      </div>
+      <div class="plan-box-body">
+        <div class="plan-feat"><div class="dot"></div><div>負責日常及中小型住院，<strong>零自付額</strong>，有費就賠</div></div>
+        <div class="plan-feat"><div class="dot"></div><div>每年及終身保障<strong>不設上限</strong>，唔怕賠完</div></div>
+        <div class="plan-feat"><div class="dot"></div><div>超出<strong>各分項賠償上限</strong>的部分，額外醫療計劃補賠 <strong>80%</strong>（每年上限 $100,000）</div></div>
+        <div class="plan-feat"><div class="dot"></div><div>全球保障，住院前30日、出院後90日門診均保</div></div>
+      </div>
+    </div>
+    <div class="plan-box">
+      <div class="plan-box-header">
+        <div class="plan-co">保誠 · 計劃二</div>
+        <div class="plan-name">尚賓計劃（自付額 $96,000）</div>
+        <div class="plan-premium">每年保費 $13,000（63歲）</div>
+      </div>
+      <div class="plan-box-body">
+        <div class="plan-feat"><div class="dot"></div><div>大病重病嘅後盾，超過自付額後<strong>全數賠償、不設分項限額</strong></div></div>
+        <div class="plan-feat"><div class="dot"></div><div>每年保障上限高達 <strong>$1,200萬</strong>，終身 <strong>$5,600萬</strong></div></div>
+        <div class="plan-feat"><div class="dot"></div><div>癌症/心臟病/中風後：家居設備改建 <strong>$50,000</strong> + 額外復康診療</div></div>
+        <div class="plan-feat"><div class="dot"></div><div>中醫治療每年 $30,000，每3年健康檢查福利</div></div>
+      </div>
+    </div>
+  </div>
+  <div style="background:#f0ebe4; border-radius:8px; padding:13px 16px; margin-bottom:32px; font-size:12.5px; color:#5a4a35; line-height:1.7;">
+    💡 <strong>組合原理：</strong>細病用摯稱心（零自付額）；若單項醫療費用超出摯稱心各分項賠償上限，差額由額外醫療計劃補賠 80%（每年上限 $100,000）；大病大手術才動用尚賓（$96,000 自付額由以上兩層先行覆蓋）。三層保障互補，總保費幾乎不變。
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="section-title">詳細保障比較</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>比較項目</th>
+          <th>AIA 尊尚計劃<span class="th-sub">自付額 $16,000</span></th>
+          <th>保誠 摯稱心<span class="th-sub">普通病房</span></th>
+          <th>保誠 尚賓計劃<span class="th-sub">自付額 $96,000</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>每年保費</td>
+          <td>$26,770</td>
+          <td>$13,726</td>
+          <td>$13,000</td>
+        </tr>
+        <tr>
+          <td>自付額<span class="sub-note">每年你自己要先付的金額</span></td>
+          <td>$16,000／年</td>
+          <td><span class="tag-good">不設自付額</span></td>
+          <td>$96,000／年</td>
+        </tr>
+        <tr>
+          <td>主要醫療費賠償方式</td>
+          <td>全數賠償<span class="sub-note">不設分項限額</span></td>
+          <td>設分項賠償限額<span class="sub-note">超出分項上限後補賠80%<br>每年上限$100,000</span></td>
+          <td><span class="tag-good">全數賠償<br>不設分項限額</span></td>
+        </tr>
+        <tr>
+          <td>每年保障上限<span class="sub-note">一年最多賠幾多</span></td>
+          <td>$500萬</td>
+          <td><span class="tag-info">不設上限</span></td>
+          <td><span class="tag-good">$1,200萬</span></td>
+        </tr>
+        <tr>
+          <td>終身保障上限<span class="sub-note">一生最多賠幾多</span></td>
+          <td>$2,000萬</td>
+          <td><span class="tag-info">不設上限</span></td>
+          <td><span class="tag-good">$5,600萬</span></td>
+        </tr>
+        <tr>
+          <td>受保病房級別（香港）</td>
+          <td>半私家房<span class="sub-note">港澳內地</span></td>
+          <td>普通病房</td>
+          <td>半私家房<span class="sub-note">升私家按50%賠償</span></td>
+        </tr>
+        <tr>
+          <td>保障地域</td>
+          <td>亞洲<span class="sub-note">含澳洲、新西蘭</span></td>
+          <td><span class="tag-good">全球</span></td>
+          <td>亞洲或全球<span class="sub-note">美國除外，可選擇</span></td>
+        </tr>
+        <tr>
+          <td>未知舊病保障<span class="sub-note">投保時唔知自己有嘅病</span></td>
+          <td>第31日起100%</td>
+          <td>第31日起100%</td>
+          <td>第31日起100%</td>
+        </tr>
+        <tr>
+          <td>癌症／心臟病／中風後復康</td>
+          <td>標準保障</td>
+          <td>標準保障</td>
+          <td><span class="tag-good">家居設備 $50,000<br>+ 額外復康診療</span></td>
+        </tr>
+        <tr>
+          <td>中醫治療</td>
+          <td><span class="na">不保</span></td>
+          <td>癌症相關中醫</td>
+          <td><span class="tag-good">$30,000／年</span></td>
+        </tr>
+        <tr>
+          <td>健康檢查福利</td>
+          <td><span class="na">不包括</span></td>
+          <td><span class="na">不包括</span></td>
+          <td><span class="tag-good">每3年1次</span><span class="sub-note">骨密度、乳房X光等</span></td>
+        </tr>
+        <tr>
+          <td>「智安排」預設服務<span class="sub-note">失去行為能力時由家人代領理賠</span></td>
+          <td><span class="na">不包括</span></td>
+          <td><span class="tag-info">✓ 包括</span></td>
+          <td><span class="tag-info">✓ 包括</span></td>
+        </tr>
+        <tr>
+          <td>綠色醫療通道（內地）<span class="sub-note">優先預約內地指定醫院</span></td>
+          <td><span class="na">不包括</span></td>
+          <td><span class="tag-info">✓ 約1,200間醫院</span></td>
+          <td><span class="tag-info">✓ 約1,200間醫院</span></td>
+        </tr>
+        <tr>
+          <td>自付額一生調低<span class="sub-note">年紀大時減輕負擔</span></td>
+          <td><span class="na">不適用</span></td>
+          <td><span class="na">不適用</span></td>
+          <td><span class="tag-good">✓ 終身1次<br>65歲起可使用</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- WHAT THIS MEANS FOR YOU -->
+  <div class="section-title">簡單嚟講，對你有咩分別？</div>
+  <div class="explainer-grid">
+    <div class="explainer-box">
+      <h4>🏥 一般住院（例如：盲腸炎手術）</h4>
+      <ul>
+        <li>AIA：先自己付 $16,000，之後由保險負責</li>
+        <li>保誠摯稱心：零自付額，各分項費用於賠償限額內直接由保險賠；若某項費用超出分項上限，超出部分由額外醫療計劃補賠 80%（每年上限 $100,000）</li>
+      </ul>
+    </div>
+    <div class="explainer-box">
+      <h4>💊 大病（例如：癌症治療）</h4>
+      <ul>
+        <li>AIA：每年最多賠 $500萬，一生最多 $2,000萬</li>
+        <li>保誠尚賓：每年最多賠 $1,200萬，一生最多 $5,600萬，差係 <strong>2至3倍</strong></li>
+      </ul>
+    </div>
+    <div class="explainer-box">
+      <h4>🌏 旅行期間出事</h4>
+      <ul>
+        <li>AIA：只保亞洲範圍（含澳洲新西蘭）</li>
+        <li>保誠摯稱心：全球保障，歐洲、美洲出事都保</li>
+      </ul>
+    </div>
+    <div class="explainer-box">
+      <h4>🧧 中醫 / 復康需要</h4>
+      <ul>
+        <li>AIA：中醫治療不保</li>
+        <li>保誠尚賓：每年 $30,000 中醫，加上癌症/中風後有額外家居改建費及復康費</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- CAUTION -->
+  <div class="caution-box">
+    <h4>⚠️ 轉保前必須知道的事</h4>
+    <ul>
+      <li>63歲轉保須重新核保，保誠會審查健康狀況，現有病症（如高血壓、糖尿病、膽固醇偏高等）有機會被列為不保事項或加收附加保費。</li>
+      <li>必須先等保誠<strong>正式批核</strong>，確認條款無重大除外事項，才可取消 AIA 保單。</li>
+      <li>千萬不要同時取消 AIA，以免出現保障空窗期。</li>
+      <li>摯稱心為普通病房級別，AIA 尊尚計劃為半私家房，病房級別有所不同，請按個人需要考慮。</li>
+    </ul>
+  </div>
+
+  <!-- DISCLAIMER -->
+  <div class="disclaimer">
+    <h5>免責聲明</h5>
+    <p>本資料僅供參考，並不構成任何保險建議或合約。所有保費及保障詳情以各保險公司正式保單條款及最新核保結果為準。保費會因應受保人健康狀況、核保結果及保險公司保費調整而有所不同。上述保障比較乃根據公開產品資料整理，並非詳盡列明所有條款，購買前請仔細閱讀相關產品說明書及保單條款。本人為保誠保險持牌代理人（牌照號碼：FA），本資料由本人獨立製作，並非由保誠保險或 AIA 官方發出。如有疑問，歡迎直接聯絡查詢，費用全免。</p>
+  </div>
+
+</div><!-- end page -->
+
+<!-- FOOTER -->
+<div class="footer-bar">
+  <div class="handle"><span>@</span>pru_lilylau &nbsp;·&nbsp; Instagram</div>
+  <div class="phone">📞 6013 3108</div>
+</div>
+
+</body>
+</html>
